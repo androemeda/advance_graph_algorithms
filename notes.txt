@@ -1,0 +1,17 @@
+max amount of edges in a simple graph undirected = nC2 = n(n-1)/2
+min amount of edges in a simple undirected graph = 0
+
+max amount of edges in a simple graph directed = nC2 * 2 = n(n-1)
+min amount of edges in a simple directed graph = 0
+
+degree of a node in undirected graph = number of neighbours
+degree of a node in directed graph : indegree = number of incoming edges
+                                     outdegree = number of outgoing edges
+                                     sum(indegrees) + sum(outdegrees) = 2*(no. of edges)
+
+how to store graph ? -> 1. edge list : array of pairs - sc : o(m) , m = number of edges
+                        2. Adj matrix : sc : o(n^2) , n = number of nodes
+                        3. Adj list : array of arraylist - sc : o(n + m)
+
+
+cycle of odd length => not bipartite
