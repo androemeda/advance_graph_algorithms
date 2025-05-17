@@ -15,3 +15,13 @@ how to store graph ? -> 1. edge list : array of pairs - sc : o(m) , m = number o
 
 
 cycle of odd length => not bipartite
+
+0-1 / 0-x bfs : use deque
+
+
+
+
+
+doubt : 
+1. 0-1 bfs hw question ?
+2. ABC_PATH
