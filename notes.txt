@@ -19,9 +19,17 @@ cycle of odd length => not bipartite
 0-1 / 0-x bfs : use deque
 
 
+topological sorting : only possible in directed acyclic graph (DAG)
+
+** we can always apply DP in DAG **
+
+
 
 
 
 doubt : 
 1. 0-1 bfs hw question ?
 2. ABC_PATH
+3. B - Round Trip
+4. E - Valid BFS ?
+5. comparator in cpp
