@@ -23,50 +23,54 @@ int h , w;
 vector<vector<char>> grid;
 vector<vector<int>> dp;
 
-vector<vector<int>> dirs = {{0,1} , {0,-1} , {1,0} , {-1,0} , {1,1} , {1,-1} , {-1,1} , {-1,-1}};
-
-int dfs(int r , int c , char prev){
-    int ans = 1;
-    if(r >= 0 && c >= 0 && r < h && c < w){
-        if(dp[r][c] != -1) return dp[r][c];
-        char curr = grid[r][c];
-        if(prev+1 == curr || prev == '.'){
-            for(int i=0 ; i<dirs.size() ; i++){
-                ans = max(ans , dfs(r+dirs[i][0] , c+dirs[i][1] , curr)+1);
-            }
-        }
-        dp[r][c] = ans;
-    }
-
-    return ans;
-}
+vector<vector<int>> dirs = {{0,-1} , {0,1} , {1,0} , {-1,0} , {1,1} , {-1,1} , {1,-1} , {-1,-1}};
 
 void solve() {
     int t = 1;
     while(true){
         cin >> h >> w;
-        if(h == 0 && w == 0) break;
 
-        grid.assign(h , vector<char>(w));
-        dp.assign(h , vector<int>(w , -1));
+        if(h == 0) break;
 
-        for(int i=0 ; i<h ; i++){
-            for(int j=0 ; j<w ; j++){
+        grid.assign(h+1 , vector<char>(w+1));
+        dp.assign(h+1 , vector<int>(w+1 , 1));
+
+        vector<pair<char,pair<int,int>>> arr;
+
+        for(int i=1 ; i<=h ; i++){
+            for(int j=1 ; j<=w ; j++){
                 cin >> grid[i][j];
+                arr.push_back({grid[i][j] , {i , j}});
             }
         }
 
+        sort(arr.begin() , arr.end());
+
         int ans = 0;
 
-        for(int i=0 ; i<h ; i++){
-            for(int j=0 ; j<w ; j++){
-                if(grid[i][j] == 'A'){
-                    ans = max(ans , dfs(i , j , '.'));
+        for(int i=arr.size()-1 ; i>=0 ; i--){
+            int cv = arr[i].first;
+            int cx = arr[i].second.first;
+            int cy = arr[i].second.second;
+
+            for(int i=0 ; i<8 ; i++){
+                int nx = cx+dirs[i][0];
+                int ny = cy+dirs[i][1];
+
+                if(nx>=1 && ny>=1 && nx<=h && ny<=w && grid[nx][ny]==grid[cx][cy]-1 && dp[nx][ny]<1+dp[cx][cy]){
+                    dp[nx][ny] = 1+dp[cx][cy];
                 }
             }
         }
 
+        for(int i=1; i<=h ; i++){
+            for(int j=1 ; j<=w ; j++){
+                if(grid[i][j] == 'A') ans = max(ans , dp[i][j]);
+            }
+        }
+
         cout << "Case " << t << ": " << ans << endl;
+
         t++;
     }
 }

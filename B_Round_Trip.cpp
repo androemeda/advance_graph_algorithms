@@ -1,91 +1,70 @@
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <stack>
 #include <algorithm>
-#include <cmath>
-#include <map>
-#include <set>
-#include <unordered_map>
-#include <unordered_set>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
-#include <ctime>
-#include <cassert>
-#include <limits>
-#include <numeric>
-#include <climits>
 #define int long long
 using namespace std;
 
-int n , m;
-vector<vector<int>> adj;
-vector<bool> visited;
-vector<int> parent;
-
-bool dfs(int src){
-    visited[src] = true;
-    for(int nb : adj[src]){
-        if(visited[nb] && parent[src] != nb){
-            vector<int> path;
-            int curr = src;
-            // parent[curr] = src;
-            while(curr != -1){
-                path.push_back(curr);
-                curr = parent[curr];
-            }
-            reverse(path.begin() , path.end());
-            path.push_back(nb);
-            cout << path.size() << endl;
-            for(int i=0 ; i<path.size() ; i++){
-                cout << path[i] << " ";
-            }
-            return true;
-        }
-        else if(!visited[nb]){
-            parent[nb] = src;
-            // visited[nb] = true;
-            if(dfs(nb)) return true;
-        }
-    }
-    return false;
-}
-
 void solve() {
+    int n, m;
     cin >> n >> m;
-
-    adj.assign(n+1 , vector<int>());
-    for(int i=0 ; i<m ; i++){
-        int a,b;
+    vector<vector<int>> adj(n+1);
+    for(int i = 0; i < m; i++){
+        int a, b;
         cin >> a >> b;
         adj[a].push_back(b);
         adj[b].push_back(a);
     }
 
-    visited.assign(n+1 , false);
-    parent.assign(n+1 , -1);
+    vector<int> state(n+1, 0), parent(n+1, -1);
+    vector<pair<int,int>> st;
+    for(int start = 1; start <= n; start++){
+        if(state[start] != 0) continue;
+        parent[start] = -1;
+        st.clear();
+        st.emplace_back(start, 0);
+        state[start] = 1;
 
-    for(int i=1 ; i<=n ; i++){
-        if(!visited[i] && dfs(i)) return;
+        while(!st.empty()){
+            auto &top = st.back();
+            int u = top.first;
+            int &idx = top.second;
+
+            if(idx < (int)adj[u].size()){
+                int v = adj[u][idx++];
+                if(state[v] == 0){
+                    parent[v] = u;
+                    state[v] = 1;
+                    st.emplace_back(v, 0);
+                }
+                else if(state[v] == 1 && v != parent[u]){
+                    vector<int> cycle;
+                    cycle.push_back(v);
+                    int cur = u;
+                    while(cur != v){
+                        cycle.push_back(cur);
+                        cur = parent[cur];
+                    }
+                    cycle.push_back(v);
+                    reverse(cycle.begin(), cycle.end());
+                    cout << cycle.size() << "\n";
+                    for(int x : cycle) cout << x << " ";
+                    cout << "\n";
+                    return;
+                }
+            } else {
+                state[u] = 2;
+                st.pop_back();
+            }
+        }
     }
 
-    cout << "IMPOSSIBLE" << endl;
+    cout << "IMPOSSIBLE\n";
 }
 
 signed main(){
-
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL); cout.tie(NULL);
+    cin.tie(NULL);
 
-    int _t = 1;
-
-    // cin >> _t;
-
-    while(_t--){
-        solve();
-    }
-
+    solve();
     return 0;
 }

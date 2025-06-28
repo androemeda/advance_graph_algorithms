@@ -33,3 +33,10 @@ doubt :
 3. B - Round Trip
 4. E - Valid BFS ?
 5. comparator in cpp
+6. longest flight route - cycles ?
+7. DP only works if the graph is a DAG (Directed Acyclic Graph) and you traverse nodes in topological order ?
+8. longest flight route
+9. priority_queue syntax
+10. time complexities of all algorithms
+11. instead of int_max/int_min , keep llong_max/llong_min everywhere and then check for overflows always.
+12. define int as long long in scaler env.
